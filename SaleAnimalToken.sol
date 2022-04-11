@@ -4,54 +4,55 @@ pragma solidity ^0.8.0;
 
 import "./MintAnimalToken.sol";
 
+//SaleAnimalToken ì‹¤í–‰ í•  ë•Œ ë¯¼íŒ… í›„ ìƒì„± ëœ ì£¼ì†Œ ê°’ì„ ë„£ì–´ì£¼ì–´ì•¼ í•¨
 contract SaleAnimalToken{
-    MintAnimalToken public mintAnimalTokenAddress; //
-
+    MintAnimalToken public mintAnimalTokenAddress; 
+    
     constructor (address _mintAnimalTokenAddress){
         mintAnimalTokenAddress = MintAnimalToken(_mintAnimalTokenAddress);
-    }           // mintAnimalTokenÀ» ½ÇÇàÇÒ¶§ ³ª¿Â ÁÖ¼Ò°ªÀ» mintAnimalTokenAddress¿¡ ³Ö¾îÁØ´Ù
+    }           // mintAnimalTokenì„ ì‹¤í–‰í• ë•Œ ë‚˜ì˜¨ ì£¼ì†Œê°’ì„ mintAnimalTokenAddressì— ì €ìž¥
 
-    mapping(uint256 => uint256) public animalTokenPrices;  // animalTokeeid ÀÔ·ÂÇÏ¸é °¡°Ý ³ª¿È
+    mapping(uint256 => uint256) public animalTokenPrices;  // animalTokenid ìž…ë ¥í•˜ë©´ ê°€ê²© ë‚˜ì˜´
 
-    uint256[] public onSaleAnimalTokenArray; //ÇÁ·ÐÆ®¿£µå¿¡¼­ ÆÇ¸ÅÁßÀÎ ÅäÅ«À» È®ÀÎ ÇÒ ¼ö ÀÖ°Ô ÇØÁÖ´Â ¹è¿­
+    uint256[] public onSaleAnimalTokenArray; //í”„ë¡ íŠ¸ì—”ë“œì—ì„œ íŒë§¤ì¤‘ì¸ í† í°ì„ í™•ì¸ í•  ìˆ˜ ìžˆê²Œ í•´ì£¼ëŠ” ë°°ì—´
 
-    //ÆÇ¸Å µî·Ï ÇÔ¼ö, ÆÈ°Í¿¡ id, °¡°Ý ÇÊ¿ä
+    //íŒë§¤ ë“±ë¡ í•¨ìˆ˜, íŒ”ê²ƒì— id, ê°€ê²© í•„ìš”
     function setForSaleAnimalToken(uint256 _animalTokenId,uint256 _price) public {
-        address animalTokenOwner = mintAnimalTokenAddress.ownerOf(_animalTokenId); // ÅäÅ« ¾ÆÀÌµð¸¦ ÀÔ·ÂÇÏ¸é ÇØ´çÇÏ´Â ÁÖÀÎ¿¡ ´ëÇÑ °ªÀÌ ³ª¿È
+        address animalTokenOwner = mintAnimalTokenAddress.ownerOf(_animalTokenId); // í† í° ì•„ì´ë””ë¥¼ ìž…ë ¥í•˜ë©´ í•´ë‹¹í•˜ëŠ” ì£¼ì¸ì— ëŒ€í•œ ì£¼ì†Œ ê°’ì´ ë‚˜ì˜´
 
-        require(animalTokenOwner ==msg.sender, "Caller is not animal token owner");  // animalTokenOwner ==msg.senderÀÌ ¾Æ´Ï¸é "Caller is not animal token owner"Ãâ·Â
-        require(_price>0,"Price is zero or lower");  //_price>0ÀÌ ¾Æ´Ï¸é "Price is zero or lower" Ãâ·Â
-        require(animalTokenPrices[_animalTokenId]==0,"This animal token is already on sale"); //(animalTokenPrices[_animalTokenId]==0ÀÌ ¾Æ´Ï¸é "This animal token is already on sale"Ãâ·Â
-        require(mintAnimalTokenAddress.isApprovedForAll(animalTokenOwner,address(this)),"Animal Token owner did not approve token"); //address(this) : saleanimaltokenÀÇ ½º¸¶Æ® ÄÁÆ®·¢Æ® ÀÔ·Â, ÀÌ ÁÖÀÎÀÌ ÀÌ ÆÇ¸Å°è¾à¼Å¿¡ ÆÇ¸Å ±ÇÇÑÀ» ³Ö¾ú´ÂÁö È®ÀÎ
+        require(animalTokenOwner ==msg.sender, "Caller is not animal token owner");  // animalTokenOwner ==msg.senderì´ ì•„ë‹ˆë©´ "Caller is not animal token owner"ì¶œë ¥
+        require(_price>0,"Price is zero or lower");  //_price>0ì´ ì•„ë‹ˆë©´ "Price is zero or lower" ì¶œë ¥
+        require(animalTokenPrices[_animalTokenId]==0,"This animal token is already on sale"); //(animalTokenPrices[_animalTokenId]==0ì´ ì•„ë‹ˆë©´ "This animal token is already on sale"ì¶œë ¥
+        require(mintAnimalTokenAddress.isApprovedForAll(animalTokenOwner,address(this)),"Animal Token owner did not approve token"); //address(this) : saleanimaltokenì˜ ìŠ¤ë§ˆíŠ¸ ì»¨íŠ¸ëž™íŠ¸ ì£¼ì†Œ, ì´ ì£¼ì¸ì´ ì´ ì»¨íŠ¸ëž™íŠ¸ì— íŒë§¤ ê¶Œí•œì„ ë„£ì—ˆëŠ”ì§€ í™•ì¸
 
         animalTokenPrices[_animalTokenId] = _price;
 
-        onSaleAnimalTokenArray.push(_animalTokenId); // ÆÇ¸ÅÇÏ´Â ¹è¿­·Î Çª½¬
+        onSaleAnimalTokenArray.push(_animalTokenId); // onSaleAnimalTokenArray ë°°ì—´ë¡œ í‘¸ì‰¬í•´ì„œ í”„ë¡ íŠ¸ì—”ë“œì—ì„œ íŒë§¤ì¤‘ìž„ì„ í™•ì¸í•  ìˆ˜ ìžˆê²Œ í•¨
     }
 
-    //±¸¸Å ÇÔ¼ö
-    function purchaseAnimalToken(uint256 _animalTokenId) public payable{  //payableÀÖ¾î¾ß ¸ÞÆ½ÀÌ ¿Ô´Ù°¬´Ù ÇÏ´Â ÇÔ¼ö ½ÇÇà °¡´É
+    //êµ¬ë§¤ í•¨ìˆ˜
+    function purchaseAnimalToken(uint256 _animalTokenId) public payable{  //payableìžˆì–´ì•¼ ë©”í‹±(ëˆ)ì´ ì™”ë‹¤ê°”ë‹¤ í•˜ëŠ” í•¨ìˆ˜ ì‹¤í–‰ ê°€ëŠ¥
         uint256 price =animalTokenPrices[_animalTokenId];
-        address animalTokenOwner = mintAnimalTokenAddress.ownerOf(_animalTokenId); //ÁÖÀÎÀÇ ÁÖ¼Ò°ªÀ» ºÒ·¯¿Â´Ù
+        address animalTokenOwner = mintAnimalTokenAddress.ownerOf(_animalTokenId); //ì£¼ì¸ì˜ ì£¼ì†Œê°’ì„ ë¶ˆëŸ¬ì˜¨ë‹¤
 
         require(price>0,"Animal token not sale"); 
-        require(price <=msg.value, "Caller sent lower than price"); // msg.value : ÇÔ¼ö¸¦ ½ÇÇàÇÒ¶§ º¸³»´Â ¸ÞÆ½ÀÇ ¾ç(ÁöºÒÇÏ´Â µ·)
-        require(animalTokenOwner !=msg.sender,"Caller is animal token owner"); // ÁÖÀÎ°ú ´Ù¸¥ »ç¶÷ÀÌ¿©¾ß ±¸¸Å°¡´É
+        require(price <=msg.value, "Caller sent lower than price"); // msg.value : í•¨ìˆ˜ë¥¼ ì‹¤í–‰í• ë•Œ ë³´ë‚´ëŠ” ë©”í‹±ì˜ ì–‘(ì§€ë¶ˆí•˜ëŠ” ëˆ)
+        require(animalTokenOwner !=msg.sender,"Caller is animal token owner"); // ì£¼ì¸ê³¼ ë‹¤ë¥¸ ì‚¬ëžŒì´ì—¬ì•¼ êµ¬ë§¤ê°€ëŠ¥
 
-        payable(animalTokenOwner).transfer(msg.value); // msg.senderÀÇ msg.value ¸¸Å­ ÅäÅ« ÁÖÀÎ¿¡°Ô µ·ÀÌ °£´Ù
-        mintAnimalTokenAddress.safeTransferFrom(animalTokenOwner,msg.sender,_animalTokenId); // 3°¡Áö ÀÎÀÚ(º¸³»´Â »ç¶÷, ¹Þ´Â »ç¶÷, ¹» º¸³¾ °ÍÀÎ°¡)
+        payable(animalTokenOwner).transfer(msg.value); // msg.senderì˜ msg.value ë§Œí¼ í† í° ì£¼ì¸ì—ê²Œ ëˆì´ ê°„ë‹¤
+        mintAnimalTokenAddress.safeTransferFrom(animalTokenOwner,msg.sender,_animalTokenId); // 3ê°€ì§€ ì¸ìž(ë³´ë‚´ëŠ” ì‚¬ëžŒ, ë°›ëŠ” ì‚¬ëžŒ, ë­˜ ë³´ë‚¼ ê²ƒì¸ê°€)
 
-        animalTokenPrices[_animalTokenId] = 0; // ÆÈ·ÈÀ¸´Ï ÆÇ¸Å Ã¶È¸
+        animalTokenPrices[_animalTokenId] = 0; // íŒ”ë ¸ìœ¼ë‹ˆ íŒë§¤ ì² íšŒ
 
         for(uint256 i =0;i<onSaleAnimalTokenArray.length;i++){
             if(animalTokenPrices[onSaleAnimalTokenArray[i]]==0){
-                onSaleAnimalTokenArray[i]=onSaleAnimalTokenArray[onSaleAnimalTokenArray.length-1]; // ¸ÇµÚ¿¡ ÀÖ´Â ¾Ö¸¦ i·Î ¿Å±â°í
-                onSaleAnimalTokenArray.pop(); // ¸ÇµÚ Á¦°Å
+                onSaleAnimalTokenArray[i]=onSaleAnimalTokenArray[onSaleAnimalTokenArray.length-1]; // ë§¨ë’¤ì— ìžˆëŠ” ì• ë¥¼ ië¡œ ì˜®ê¸°ê³ 
+                onSaleAnimalTokenArray.pop(); // ë§¨ë’¤ ì œê±°
             }
         }
     }
 
-    // ÆÇ¸ÅÁßÀÎ ÅäÅ« ¹è¿­ÀÇ ±æÀÌ Ãâ·ÂÇÏ´Â ÇÔ¼ö, ÀÌ°É ÅëÇØ for¹®À» µ¹·Á ÇÁ·ÐÆ®¿£µå¿¡¼­ ÆÇ¸ÅÁßÀÎ ¸®½ºÆ®¸¦ °¡Á®¿Â´Ù
+    // íŒë§¤ì¤‘ì¸ í† í° ë°°ì—´ì˜ ê¸¸ì´ ì¶œë ¥í•˜ëŠ” í•¨ìˆ˜, ì´ê±¸ í†µí•´ forë¬¸ì„ ëŒë ¤ í”„ë¡ íŠ¸ì—”ë“œì—ì„œ íŒë§¤ì¤‘ì¸ ë¦¬ìŠ¤íŠ¸ë¥¼ ê°€ì ¸ì˜¨ë‹¤
     function getOnsaleAnimalTokenArrayLength() view public returns(uint256){
         return onSaleAnimalTokenArray.length;
     }
